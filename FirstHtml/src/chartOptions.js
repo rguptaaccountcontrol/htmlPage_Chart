@@ -40,14 +40,15 @@ var options_Dly = {
             },
 
     series: {
-            0: { targetAxisIndex: 0, lineWidth: 0.3 },
-            1: { lineWidth: 0.5 },
+            //0: { targetAxisIndex: 0, lineWidth: 0.75 },  // price line
+            0: { pointSize: .5, pointShape: 'square', lineWidth: 0.0 },  // price line
+            1: { lineWidth: 0.5 },  // no lag
             2: { lineWidth: 0.5},
             //2: { pointSize: .5, pointShape: 'square', lineWidth: 0.0 },
             3: { lineWidth: 0.5, lineDashStyle: [1,1] },
         },
 
-    colors: ["black", "blue", "red","green"],
+    colors: ["black", "red", "black", "blue","green"],
 
     chartArea:{left:'5%',top:'10%',width:'85%',height:'65%'},
   };

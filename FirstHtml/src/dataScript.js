@@ -2,7 +2,8 @@
 
 var dData;
 // Base url defines if we are using through IIS server or local 3000 port
-const baseUrl = 'http://192.168.0.171/YahooProxy/';    //http://192.168.0.171:3000/
+const baseUrl = 'http://192.168.0.171/YahooProxy/';
+//const baseUrl = `http://192.168.0.171:3000/`;
 
 function GetTicker(i){
   //alert('reached function')
@@ -169,9 +170,8 @@ function myFunHist(sym)
 
 function QuoteData4Chart()
 {
-    //document.getElementById("messages").innerHTML = JSON.stringify(dData.data);
     document.getElementById("quoteprice").innerHTML = JSON.stringify(dData.data);
-    console.log(dData);
+    //console.log(dData);
 }
 
 
