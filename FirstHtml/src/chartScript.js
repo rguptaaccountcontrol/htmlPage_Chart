@@ -16,14 +16,9 @@ function drawChart_Final(s) {
         var winWidth = $( window ).width();  // width of the window
         //winWidth = Math.min(winWidth, 614);  // The max width of the chart can be 614 px
         ////////////////////////////////////////////////////////////////////
-                    // create google data tables for Dly and Wkly charts
-        //var data_DlyData_CloPr = new google.visualization.DataTable();
-        //data_DlyData_CloPr = Chartdata_Dly(1);  // use a function so we can pick and choose columns
-        //var jsonData = await YahooData(sym);
-        //data_DlyData_CloPr = await YahooData(sym);
-        var dateFromYahoo = await YahooData(sym);
+        var dataFromYahoo = await YahooData(sym); // get Yahoo data for a symbol
         /////////////////////////////////////////////////////////////////////////////
-        // Do other calculations here, like stocastics, Avg etc
+        // Do other CALCULATIONS here, like stocastics, Avg etc
         //console.log(jsonAryPr);
         //console.log(dataAryPr);
         console.log(1);
@@ -35,21 +30,27 @@ function drawChart_Final(s) {
         var Pr10dAvg = await fn_CalcSMA(jsonAryPr, 1, 10); // 10 day moving average
         //console.log(Pr10dAvg);
         console.log(3);
+        // COMBINE ALL CALCULATED DATA INTO ONE JSON ARRAY
         var PrPlusNoLag = await combineData(jsonAryPr, NoLag, "nolag");  // pass the array to which we need to combine the key and the key
         var PrPlusNoLag = await combineData(PrPlusNoLag, Pr10dAvg, "avg10d");  // pass the array to which we need to combine the key and the key
         //console.log(PrPlusNoLag);
         console.log(4);
         
         //////////////////////////////////////////////////////////////////////////////
-        var new_DlyData_CloPr = new google.visualization.DataTable();
-        new_DlyData_CloPr = await createGoogleDataTable(PrPlusNoLag);
-        //////////////////////////////////////////////////////////////////////////////
-        // Daily chart
+        // put data in a MASTER DATA TABLE. This GOOGLE DATATABLE will have all the data we want for every chart.
+        var masterDataTable = new google.visualization.DataTable();
+        masterDataTable = await createGoogleDataTable(PrPlusNoLag);
+        //console.log(masterDataTable);
+
+        /////////////////////////////////////////////////////////////////////////////
+        // Daily price chart. select the data we want from the master table for daily price chart
+        var DlyData_CloPr = new google.visualization.DataView(masterDataTable);
+        DlyData_CloPr.setColumns([0, 5, 7, 8]);  // date, AdjClo, nolag, avg10d 
+
         var chart_Dly_CloPr = new google.visualization.LineChart(document.getElementById('chart_id_Dly_CloPr'));
         options_Dly.title = 'Daily Close Price ' + sym;
         options_Dly.width = winWidth;
-        //chart_Dly_CloPr.draw(data_DlyData_CloPr, options_Dly);
-        chart_Dly_CloPr.draw(new_DlyData_CloPr, options_Dly);
+        chart_Dly_CloPr.draw(DlyData_CloPr, options_Dly);
 
         
     }
@@ -155,7 +156,7 @@ function YahooData(sym){
 ////////////////////////////////////////////////////////
 async function createGoogleDataTable(finalJAry)
 {
-    ////////////////// create array from json data ///////////
+    ////////////////// create array from json data so Google DATATABLE can injest it ///////////
     var dAryFinal = [];
     for(var i=1;i<finalJAry.length;i++)
     {
@@ -180,24 +181,28 @@ async function createGoogleDataTable(finalJAry)
     ////////////////////// create google table /////////////////
     
     var dData = new google.visualization.DataTable();
-        dData.addColumn('date', 'Date');           // 0
+        dData.addColumn('date', 'Date');        // 0
         dData.addColumn('number', 'open');      // 1
         dData.addColumn('number', 'high');      // 2
-        dData.addColumn('number', 'low');      // 3
-        dData.addColumn('number', 'close');      // 4
-        dData.addColumn('number', 'AdjClo');      // 5
-        dData.addColumn('number', 'vol');      // 6
-        dData.addColumn('number', 'nolag');      // 7
-        dData.addColumn('number', 'avg10d');      // 8
+        dData.addColumn('number', 'low');       // 3
+        dData.addColumn('number', 'close');     // 4
+        dData.addColumn('number', 'AdjClo');    // 5
+        dData.addColumn('number', 'vol');       // 6
+        dData.addColumn('number', 'nolag');     // 7
+        dData.addColumn('number', 'avg10d');    // 8
 
         dData.addRows(dAryFinal);  // use the raw data array. All columns in the data array will be used
 
         // Make a view so we can pick the columns we want
-        var myView_dData = new google.visualization.DataView(dData);
-        myView_dData.setColumns([0, 5, 7, 8]);  // date, AdjClo 
+        //var myView_dData = new google.visualization.DataView(dData);
+        //myView_dData.setColumns([0, 5, 7, 8]);  // date, AdjClo 
 
-        return myView_dData;
+        //return myView_dData;
+
+        return dData; // return the google table
     
 
 
 }
+
+
