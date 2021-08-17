@@ -15,7 +15,7 @@ async function fn_CalcSMA(jAryPr,prType,NoOfBars)   // jAryPr is the json array 
         //var lo = Number(jAryPr[i].Low);
         var clo = Number(jAryPr[i].Close);
 
-        if (i < NoOfBars)
+        if (Number(i) < Number(NoOfBars))
         {
             tot = tot + clo;
             OutAvg = clo;  // we pass the same value as the close price

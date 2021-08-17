@@ -7,10 +7,10 @@ async function fn_CalcStocastics(jAryPr, lookBackDays, iSmoothingKdays, iSmoothi
 
     for(var i=0;i<jAryPr.length;i++)
     {
-        if (i > lookBackDays)
+        if (Number(i) > Number(lookBackDays))
         {
-            hh = -9999.0;  // initialize highest high
-            ll = 9999.0;  // initialize lowest low
+            hh = Number(-999999.0);  // initialize highest high
+            ll = Number(999999.0);  // initialize lowest low
             clo = Number(jAryPr[i].Close).toFixed(2);
 
             for(var j=(i-lookBackDays+1); j<=i; j++)  // find the highest high and the lowest low in the last lookbackdays
@@ -18,14 +18,14 @@ async function fn_CalcStocastics(jAryPr, lookBackDays, iSmoothingKdays, iSmoothi
                 hi = Number(jAryPr[j].High).toFixed(2);
                 lo = Number(jAryPr[j].Low).toFixed(2);
 
-                if (hi > hh)    // highest high in lookBackDays
+                if (Number(hi) > Number(hh))    // highest high in lookBackDays
                     hh = hi;
 
-                if (lo < ll)    // lowest low in lookBackDays
+                if (Number(lo) < Number(ll))    // lowest low in lookBackDays
                     ll = lo;
             }
 
-            if (hh === 1)
+            if (Number(hh) === 1)
                 sto = 0.0;
             else
                 sto = ((clo-ll)/(hh-ll)*100).toFixed(2)   // stocastics for lookBackPeriod
@@ -59,8 +59,8 @@ async function fn_CalcStocastics(jAryPr, lookBackDays, iSmoothingKdays, iSmoothi
         obj["High"] = Number(jAryPr[i].High);
         obj["Low"] = Number(jAryPr[i].Low);
         obj["Close"] = Number(jAryPr[i].Close);
-        obj[sStoK] = Number(StoKAry[i]).toFixed(2);
-        obj[sStoD] = Number(SroDAry[i]).toFixed(2);
+        obj[sStoK] = Number(StoKAry[i]).toFixed(0);
+        obj[sStoD] = Number(SroDAry[i]).toFixed(0);
 
         rtnJsonAry.push(obj);
     }
@@ -80,7 +80,7 @@ function SMAforAry(aaAry, bars)
     {
         var v = Number(aaAry[i]);
 
-        if (i < bars)
+        if (Number(i) < Number(bars))
         {
             tot = tot + v;
             OutAvg = v;  // we pass the same value back as average

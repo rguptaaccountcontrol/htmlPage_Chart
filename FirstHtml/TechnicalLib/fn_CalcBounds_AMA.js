@@ -36,7 +36,7 @@ async function fn_CalcBounds_AMA(jAryPr,prType)
 
         var obj = {};  // to create the json object
         //console.log(jAryPr[i]);
-        if (i > NAma)
+        if (Number(i) > Number(NAma))
         {
             
 
@@ -54,7 +54,7 @@ async function fn_CalcBounds_AMA(jAryPr,prType)
             }
 
             cc = 0;
-            if (vc > 0 )
+            if (Number(vc) > 0 )
                 cc = (dc/vc)*(dc/vc);   // smoothing constant
 
             PrExp = PrExp*(1-cc) + (cc*clo);
@@ -69,7 +69,7 @@ async function fn_CalcBounds_AMA(jAryPr,prType)
             UpBnd = PrExp + expsd*1.64;                 // upper band
             DnBnd = PrExp - expsd*1.64;                 // lower band
 
-            if (expsd > 0)
+            if (Number(expsd) > 0)
                 ZValue = (clo - PrExp)/expsd;
             else
                 ZValue = 0.0; 

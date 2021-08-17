@@ -41,7 +41,7 @@ async function fn_CalcNoLagEMA(jAryPr,prType,rtn)   // jAryPr is the json array 
         var clo = Number(jAryPr[i].Close);
 
         
-        if (clo > 0)
+        if (Number(clo) > 0)
         {
 
             var pr = (hi+lo+clo)/3.0;
