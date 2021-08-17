@@ -105,7 +105,7 @@ var options_Dly_Pr = {
             //3: { lineWidth: 0.5, lineDashStyle: [1,1] },
         },
 
-    colors: ["black", "blue", "red", "blue"],
+    colors: ["black", "#7800FF", "red", "blue"],
 
     chartArea:{left:'5%',top:'10%',width:'85%',height:'65%'},
   };

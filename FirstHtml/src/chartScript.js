@@ -24,7 +24,7 @@ function drawChart_Final(s) {
         console.log(1);
         var rnNoLag = [];
         var NoLag =  await fn_CalcNoLagEMA(jsonAryPr, 1,rnNoLag);  // we pass the jasonAry and the price type 1=daily, 2=weekly, 3=monthly
-        //console.log("jsonAry len: ", NoLag);
+        //console.log("jsonAry: ", jsonAryPr);
         //console.log("rn: ", rnNoLag.value);
         console.log(2);
         var Pr10dAvg = await fn_CalcSMA(jsonAryPr, 1, 10); // 10 day moving average
@@ -175,7 +175,7 @@ function YahooData(sym){
 async function createGoogleDataTable(finalJAry)
 {
     ////////////////// create array from json data so Google DATATABLE can injest it ///////////
-    var StartPoint = finalJAry.length -180; // Start point is 6 months back from the current date
+    var StartPoint = finalJAry.length - 150; // Take last 150 days from the current date
     if (StartPoint < 0 )
         StartPoint = 1;
 
