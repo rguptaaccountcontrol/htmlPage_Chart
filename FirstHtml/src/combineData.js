@@ -14,6 +14,10 @@ async function combineData(ary1, ary2, keyToCombine)
             obj["nolag"] = ary2[i].emaNoLag;
         else if (keyToCombine === "avg10d")
             obj["avg10d"] = ary2[i].avg10d;
+        else if (keyToCombine === "StoK5B")
+            obj["StoK5B"] = ary2[i].StoK5B;
+        else if (keyToCombine === "StoK14B")
+            obj["StoK14B"] = ary2[i].StoK14B;
 
         //console.log(obj);
         rtnJsonAry.push(obj);

@@ -118,7 +118,7 @@ function myFunHist(sym)
     var dd2 = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
     
     var d1 = d; //
-    d1.setDate(d1.getDate() - 90); // 90 days behind d1
+    d1.setDate(d1.getDate() - 365); // get 1 year of data for daily for calculations
     var dd1 = (d1.getMonth()+1) + "/" + d1.getDate() + "/" + d1.getFullYear();
 
     var url;
@@ -140,7 +140,7 @@ function myFunHist(sym)
     //axios.get(url)
                 .then((response) => {
                            //alert("Hello! I am an alert box!!");
-                            document.getElementById("demo").innerHTML = JSON.stringify(response);
+                            //document.getElementById("demo").innerHTML = JSON.stringify(response);
                             
                             dData = response;
                             //console.log(response);

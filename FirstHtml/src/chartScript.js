@@ -30,16 +30,23 @@ function drawChart_Final(s) {
         var Pr10dAvg = await fn_CalcSMA(jsonAryPr, 1, 10); // 10 day moving average
         //console.log(Pr10dAvg);
         console.log(3);
+        var stocastics5 = await fn_CalcStocastics(jsonAryPr,5,3,3); //5 days lookback, 3 days avg for %D, 3 days avg for %K 
+        var stocastics14 = await fn_CalcStocastics(jsonAryPr,14,3,3); //14 days lookback, 3 days avg for %D, 3 days avg for %K 
+        var bounds = await fn_CalcBounds_AMA(jsonAryPr,1);  // calculate bounds and AMA
+        //console.log(stocastics);
+        //console.log(stocastics14);
         // COMBINE ALL CALCULATED DATA INTO ONE JSON ARRAY
-        var PrPlusNoLag = await combineData(jsonAryPr, NoLag, "nolag");  // pass the array to which we need to combine the key and the key
-        var PrPlusNoLag = await combineData(PrPlusNoLag, Pr10dAvg, "avg10d");  // pass the array to which we need to combine the key and the key
-        //console.log(PrPlusNoLag);
+        var PrFinalAry = await combineData(jsonAryPr, NoLag, "nolag");  // pass the array to which we need to combine the key and the key
+        var PrFinalAry = await combineData(PrFinalAry, Pr10dAvg, "avg10d");  // pass the array to which we need to combine the key and the key
+        var PrFinalAry = await combineData(PrFinalAry, stocastics5, "StoK5B");  // pass the array to which we need to combine the key and the key
+        var PrFinalAry = await combineData(PrFinalAry, stocastics14, "StoK14B");  // pass the array to which we need to combine the key and the key
+        //console.log(PrFinalAry);
         console.log(4);
         
         //////////////////////////////////////////////////////////////////////////////
         // put data in a MASTER DATA TABLE. This GOOGLE DATATABLE will have all the data we want for every chart.
         var masterDataTable = new google.visualization.DataTable();
-        masterDataTable = await createGoogleDataTable(PrPlusNoLag);
+        masterDataTable = await createGoogleDataTable(PrFinalAry);
         //console.log(masterDataTable);
 
         /////////////////////////////////////////////////////////////////////////////
@@ -48,9 +55,20 @@ function drawChart_Final(s) {
         DlyData_CloPr.setColumns([0, 5, 7, 8]);  // date, AdjClo, nolag, avg10d 
 
         var chart_Dly_CloPr = new google.visualization.LineChart(document.getElementById('chart_id_Dly_CloPr'));
-        options_Dly.title = 'Daily Close Price ' + sym;
-        options_Dly.width = winWidth;
-        chart_Dly_CloPr.draw(DlyData_CloPr, options_Dly);
+        options_Dly_Pr.title = 'Daily Close Price ' + sym;
+        options_Dly_Pr.width = winWidth;
+        chart_Dly_CloPr.draw(DlyData_CloPr, options_Dly_Pr);
+
+        ////////////////////////////////////////////////////////////////////////////
+        // STOCASTICS CHART
+        var DlyData_Sto = new google.visualization.DataView(masterDataTable);
+        DlyData_Sto.setColumns([0, 9, 10, 11, 12]);  // date, StoK5B, StoK14B, Sto Up Band, Sto Low Band
+        
+        var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Dly_Sto'));
+        options_Sto.title = 'Daily Sto ' + sym;
+        options_Sto.width = winWidth;
+        chart_Dly_Sto.draw(DlyData_Sto, options_Sto);
+
 
         
     }
@@ -157,8 +175,12 @@ function YahooData(sym){
 async function createGoogleDataTable(finalJAry)
 {
     ////////////////// create array from json data so Google DATATABLE can injest it ///////////
+    var StartPoint = finalJAry.length -180; // Start point is 6 months back from the current date
+    if (StartPoint < 0 )
+        StartPoint = 1;
+
     var dAryFinal = [];
-    for(var i=1;i<finalJAry.length;i++)
+    for(var i=StartPoint;i<finalJAry.length;i++) // load only date after 6 months to current. We have 1 yr data for calculation by we display only 6 months
     {
         var rowObjFinal = [];
 
@@ -171,6 +193,10 @@ async function createGoogleDataTable(finalJAry)
         rowObjFinal[6] = Number(finalJAry[i].Volume);    // vol 6 
         rowObjFinal[7] = Number(finalJAry[i].nolag);    // nolag 7
         rowObjFinal[8] = Number(finalJAry[i].avg10d);    // avg10d 8
+        rowObjFinal[9] = Number(finalJAry[i].StoK5B);    // StoK5 9
+        rowObjFinal[10] = Number(finalJAry[i].StoK14B);    // StoK14 10
+        rowObjFinal[11] = 80.0;                             // StoK14 Upper Band 11
+        rowObjFinal[12] = 25.0;                            // StoK14 Lower Band 12
 
         dAryFinal.push(rowObjFinal);
 
@@ -179,6 +205,7 @@ async function createGoogleDataTable(finalJAry)
     //console.log(dAryFinal);
 
     ////////////////////// create google table /////////////////
+    // The name should not have a number at the end. It can have a number in it.
     
     var dData = new google.visualization.DataTable();
         dData.addColumn('date', 'Date');        // 0
@@ -190,6 +217,10 @@ async function createGoogleDataTable(finalJAry)
         dData.addColumn('number', 'vol');       // 6
         dData.addColumn('number', 'nolag');     // 7
         dData.addColumn('number', 'avg10d');    // 8
+        dData.addColumn('number', 'StoK5B');    // 9
+        dData.addColumn('number', 'StoK14B');   // 10
+        dData.addColumn('number', 'StoKUp');   // 11
+        dData.addColumn('number', 'StoKDn');   // 12
 
         dData.addRows(dAryFinal);  // use the raw data array. All columns in the data array will be used
 
