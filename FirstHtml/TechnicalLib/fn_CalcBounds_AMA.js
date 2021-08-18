@@ -6,6 +6,7 @@ async function fn_CalcBounds_AMA(jAryPr,prType)
     var diff=0.0, diffsqr=0.0, avgdiff=0.0, expsd=0.0;
     var UpBnd=0.0, DnBnd=0.0, ZValue=0.0;
     var CloNAma=0.0;
+    var AMAStopLossPr = 0.0;
     var rtnJsonAry = [];  // json array to return
 
     switch(prType) {
@@ -79,7 +80,13 @@ async function fn_CalcBounds_AMA(jAryPr,prType)
             // the default values will be here.
         }
 
+        // AMAStopLoss is defined as a value of AMA iBarsAgo4StopLoss
+        if (i > iBarsAgo4StopLoss)
+            AMAStopLossPr = Number(rtnJsonAry[i-iBarsAgo4StopLoss].AMA);  // We need to make it a number because the JSON array keeps a string
+        else
+            AMAStopLossPr = 0;
         //console.log(dt,i,clo,PrExp,UpBnd,DnBnd,ZValue,"..",diff,diffsqr,avgdiff,expsd);
+        //console.log(dt,i,clo,PrExp,AMAStopLossPr);
 
         obj["Date"] = dt;
         //obj["High"] = hi.toFixed(2);
@@ -89,6 +96,7 @@ async function fn_CalcBounds_AMA(jAryPr,prType)
         obj["UpBnd"] = UpBnd.toFixed(2);
         obj["DnBnd"] = DnBnd.toFixed(2);
         obj["ZValue"] = ZValue.toFixed(2);
+        obj["AMAStopLoss"] = AMAStopLossPr.toFixed(2);
 
         rtnJsonAry.push(obj);
     }
