@@ -21,18 +21,22 @@ function drawChart_Final(s) {
         // Do other CALCULATIONS here, like stocastics, Avg etc
         //console.log(jsonAryPr);
         //console.log(dataAryPr);
+        var jAryPrClean = await cleanData(jsonAryPr);
+        //console.log(jAryPrClean);
+        jsonAryPr = jAryPrClean;  // assign the ceaned up array
         console.log(1);
         var rnNoLag = [];
         var NoLag =  await fn_CalcNoLagEMA(jsonAryPr, 1,rnNoLag);  // we pass the jasonAry and the price type 1=daily, 2=weekly, 3=monthly
         //console.log("jsonAry: ", jsonAryPr);
         //console.log("rn: ", rnNoLag.value);
         console.log(2);
-        var Pr10dAvg = await fn_CalcSMA(jsonAryPr, 1, 10); // 10 day moving average
+        var Pr10dAvg = await fn_CalcSMA(jsonAryPr, 10); // 10 day moving average of close price
         //console.log(Pr10dAvg);
         console.log(3);
         var stocastics5 = await fn_CalcStocastics(jsonAryPr,5,3,3); //5 days lookback, 3 days avg for %D, 3 days avg for %K 
         var stocastics14 = await fn_CalcStocastics(jsonAryPr,14,3,3); //14 days lookback, 3 days avg for %D, 3 days avg for %K 
-        var bounds = await fn_CalcBounds_AMA(jsonAryPr,1);  // calculate bounds and AMA
+        var bounds = await fn_CalcBounds_AMA(jsonAryPr,1);  // calculate bounds and AMA and AMAStopLossPrice
+        var prMtm = await fn_CalcPriceMomentum(jsonAryPr,1);
         //console.log(stocastics);
         //console.log(stocastics14);
         // COMBINE ALL CALCULATED DATA INTO ONE JSON ARRAY
@@ -40,6 +44,10 @@ function drawChart_Final(s) {
         var PrFinalAry = await combineData(PrFinalAry, Pr10dAvg, "avg10d");  // pass the array to which we need to combine the key and the key
         var PrFinalAry = await combineData(PrFinalAry, stocastics5, "StoK5B");  // pass the array to which we need to combine the key and the key
         var PrFinalAry = await combineData(PrFinalAry, stocastics14, "StoK14B");  // pass the array to which we need to combine the key and the key
+        var PrFinalAry = await combineData(PrFinalAry, bounds, "AMAStopLoss");  // pass the array to which we need to combine the key and the key
+        var PrFinalAry = await combineData(PrFinalAry, prMtm, "MtmRawStr");  // pass the array to which we need to combine the key and the key
+        var PrFinalAry = await combineData(PrFinalAry, prMtm, "MtmAvgStr");  // pass the array to which we need to combine the key and the key
+
         //console.log(PrFinalAry);
         console.log(4);
         
@@ -52,10 +60,10 @@ function drawChart_Final(s) {
         /////////////////////////////////////////////////////////////////////////////
         // Daily price chart. select the data we want from the master table for daily price chart
         var DlyData_CloPr = new google.visualization.DataView(masterDataTable);
-        DlyData_CloPr.setColumns([0, 5, 7, 8]);  // date, AdjClo, nolag, avg10d 
+        DlyData_CloPr.setColumns([0, 5, 7, 8, 13]);  // date, AdjClo, nolag, avg10d, AMA
 
         var chart_Dly_CloPr = new google.visualization.LineChart(document.getElementById('chart_id_Dly_CloPr'));
-        options_Dly_Pr.title = 'Daily Close Price ' + sym;
+        options_Dly_Pr.title = 'Daily Close Price (' + sym + ')';
         options_Dly_Pr.width = winWidth;
         chart_Dly_CloPr.draw(DlyData_CloPr, options_Dly_Pr);
 
@@ -65,9 +73,19 @@ function drawChart_Final(s) {
         DlyData_Sto.setColumns([0, 9, 10, 11, 12]);  // date, StoK5B, StoK14B, Sto Up Band, Sto Low Band
         
         var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Dly_Sto'));
-        options_Sto.title = 'Daily Sto ' + sym;
+        options_Sto.title = 'Daily Stocatics (' + sym + ')';
         options_Sto.width = winWidth;
         chart_Dly_Sto.draw(DlyData_Sto, options_Sto);
+
+        ////////////////////////////////////////////////////////////////////////////
+        // MOMENTUM CHART
+        var DlyData_Mtm = new google.visualization.DataView(masterDataTable);
+        DlyData_Mtm.setColumns([0, 14, 15]);  // date, MtmRawStr, MtmAvgStr
+        
+        var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Dly_Mtm'));
+        options_Mtum.title = 'Daily Momentum (' + sym + ')';
+        options_Mtum.width = winWidth;
+        chart_Dly_Sto.draw(DlyData_Mtm, options_Mtum);
 
 
         
@@ -197,6 +215,10 @@ async function createGoogleDataTable(finalJAry)
         rowObjFinal[10] = Number(finalJAry[i].StoK14B);    // StoK14 10
         rowObjFinal[11] = 80.0;                             // StoK14 Upper Band 11
         rowObjFinal[12] = 25.0;                            // StoK14 Lower Band 12
+        rowObjFinal[13] = Number(finalJAry[i].AMAStopLoss);        // AMAStopLoss 13
+
+        rowObjFinal[14] = Number(finalJAry[i].MtmRawStr);        // MtmRawStr 14
+        rowObjFinal[15] = Number(finalJAry[i].MtmAvgStr);        // MtmAvgStr 15
 
         dAryFinal.push(rowObjFinal);
 
@@ -221,6 +243,9 @@ async function createGoogleDataTable(finalJAry)
         dData.addColumn('number', 'StoK14B');   // 10
         dData.addColumn('number', 'StoKUp');   // 11
         dData.addColumn('number', 'StoKDn');   // 12
+        dData.addColumn('number', 'AMAStopLoss');   // 13
+        dData.addColumn('number', 'MtmRawStr');   // 14
+        dData.addColumn('number', 'MtmAvgStr');   // 15
 
         dData.addRows(dAryFinal);  // use the raw data array. All columns in the data array will be used
 

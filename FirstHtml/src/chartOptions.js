@@ -41,14 +41,14 @@ var options_Dly_Pr = {
 
     series: {
             //0: { targetAxisIndex: 0, lineWidth: 0.75 },  // price line
-            0: { pointSize: .5, pointShape: 'square', lineWidth: 0.0 },  // price line
+            0: { pointSize: .5, pointShape: 'square', lineWidth: 0.5 },  // price line
             1: { lineWidth: 0.5 },  // no lag
-            2: { lineWidth: 0.5},
-            //2: { pointSize: .5, pointShape: 'square', lineWidth: 0.0 },
-            3: { lineWidth: 0.5, lineDashStyle: [1,1] },
+            2: { lineWidth: 0.5},   // avg10d
+            3: { pointSize: .5, pointShape: 'square', lineWidth: 0.0 },
+            //4: { lineWidth: 0.5, lineDashStyle: [1,1] },
         },
 
-    colors: ["black", "red", "black", "blue","green"],
+    colors: ["black", "red", "black", "green","green"],
 
     chartArea:{left:'5%',top:'10%',width:'85%',height:'65%'},
   };
@@ -64,8 +64,9 @@ var options_Dly_Pr = {
           },
     crosshair: { trigger: 'both' }, // Display crosshairs on focus and selection.
 
-    hAxis: {showTextEvery: 1,
+    hAxis: {showTextEvery: 100000,  // this spaces out the test every 100000, effectively stopping it from showing on the chart.
            gridlines: {count: 50, lineWidth: 0.25},
+           textPosition: 'in',
            },
 
     vAxes: {0: {  viewWindowMode:'explicit',
@@ -109,3 +110,7 @@ var options_Dly_Pr = {
 
     chartArea:{left:'5%',top:'10%',width:'85%',height:'65%'},
   };
+
+  /////////////////////////////////////////////////////////////////////
+  
+  
