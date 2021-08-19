@@ -57,6 +57,10 @@ var options_Dly_Pr = {
   var options_Sto = {
     width: 614, //winWidth,
     title: 'Daily Relative Strenght Line',
+    titleTextStyle: {
+      color: "rgb(136, 196, 255)",
+      fontSize: 10,
+    },
 
     legend: {
               position: 'in',

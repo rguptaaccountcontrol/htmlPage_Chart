@@ -1,6 +1,10 @@
 var options_Mtum = {
     width: 614, //winWidth,
     title: 'Daily Relative Strenght Line',
+    titleTextStyle: {
+            color: "rgb(136, 136, 136)",
+            fontSize: 10,
+    },
 
     legend: {
               position: 'in',
