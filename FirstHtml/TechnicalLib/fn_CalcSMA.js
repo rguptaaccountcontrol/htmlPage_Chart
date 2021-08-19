@@ -4,7 +4,7 @@ async function fn_CalcSMA(jAryPr, NoOfBars)   // jAryPr is the json array with p
     var tot = 0, OutAvg = 0;
 
     var sAvg = 'avg'+NoOfBars+'d';
-    console.log(sAvg);
+    //console.log(sAvg);
 
     for(var i=0;i<jAryPr.length;i++)
     {
