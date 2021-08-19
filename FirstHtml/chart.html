@@ -28,6 +28,7 @@ margin-top: -50px;
 
   <!-- <script src="https://unpkg.com/axios/dist/axios.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="./src/buttonScript.js" type="text/javascript"></script>
   <script src="./src/dataScript.js" type="text/javascript"></script>
   <script src="./src/cleanData.js" type="text/javascript"></script>
   <script src="./src/chartOptions.js" type="text/javascript"></script> 
@@ -44,10 +45,10 @@ margin-top: -50px;
 
 <div>
 
-  <input type = "text" id = "tickerid">
-  <button id = "daily" onclick="GetTicker(1)">daily</button>
-  <button id = "weekly" onclick="GetTicker(2)">weekly</button>
-  <button id = "monthly" onclick="GetTicker(3)">monthly</button>
+  <input type = "text" id = "tickerid" onkeypress="return runScript(event)">
+  <button id = "daily" onclick="GetTicker(1)" >daily</button>   <!-- call GetTicker with prType 1 i.e. daily when daily button is clicked-->
+  <button id = "weekly" onclick="GetTicker(2)">weekly</button>  <!-- call GetTicker with prType 2 i.e. weekly when weekly button is clicked-->
+  <button id = "monthly" onclick="GetTicker(3)">monthly</button> <!-- call GetTicker with prType 3 i.e. monthly when monthly button is clicked-->
 </div>
 
 <div class="mtum" id="chart_id_Dly_Mtm">
