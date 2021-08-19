@@ -5,49 +5,6 @@ var dData;
 const baseUrl = 'http://192.168.0.171/YahooProxy/';
 //const baseUrl = `http://192.168.0.171:3000/`;
 
-function GetTicker(i){
-  //alert('reached function')
-  var ticker = document.getElementById("tickerid").value; // get the ticker
-
-  if (ticker === '')
-  { 
-    //alert('no ticker');
-    document.getElementById("messages").innerHTML = 'Enter a ticker in the above box';
-    return;
-  }
-  //alert(ticker);
-  // color all buttons black
-  document.getElementById("daily").style.color = "black";
-  document.getElementById("weekly").style.color = "black";
-  document.getElementById("monthly").style.color = "black";
-  
-  // Take action based on the button clicked
-  switch(i) {
-             case 1:
-                document.getElementById("daily").style.color = "red";
-                myFunHist(ticker);
-                drawChart_Final(ticker);
-                break;
-             case 2:
-                document.getElementById("weekly").style.color = "red";
-                myFunHist(ticker);
-               break;
-              case 3:
-                  document.getElementById("monthly").style.color = "red";
-                  myFunctionYahoo(ticker);
-                  drawChart_Final(ticker);
-               break;
-             default:
-               // code block
-           }
-} // end GetTicker(i)
-
-function myFunction() {
-  //var x = document.getElementById("myDIV").innerHTML;
-  document.getElementById("messages").innerHTML = "function works";
-} // myFunction()
-
-
 function myFunctionYahoo(t) {
 
   
@@ -111,14 +68,15 @@ function myFunctionYahoo(t) {
 
 
 
-function myFunHist(sym)
+function myFunHist(sym, numOfDays)
 {
     const d = new Date();
     d.setDate(d.getDate() + 1);  // increase the date by 1
     var dd2 = (d.getMonth()+1) + "/" + d.getDate() + "/" + d.getFullYear();
     
     var d1 = d; //
-    d1.setDate(d1.getDate() - 365); // get 1 year of data for daily for calculations
+    //d1.setDate(d1.getDate() - 365); // get 1 year of data for daily for calculations
+    d1.setDate(d1.getDate() - numOfDays); // get 1 year of data for daily for calculations
     var dd1 = (d1.getMonth()+1) + "/" + d1.getDate() + "/" + d1.getFullYear();
 
     var url;

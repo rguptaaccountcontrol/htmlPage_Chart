@@ -1,5 +1,5 @@
 var jsonAryPr;  // this is the JSON variable for price data
-var dataAryPr;
+var dataAryPr;  // this is a array for price data
 
 // Load the Visualization API and the piechart package.
 google.charts.load('current', { 'packages': ['corechart'] });
@@ -8,31 +8,32 @@ google.charts.load('current', { 'packages': ['corechart'] });
 // We have commented the line below because wa want the chart to appear on a click of button
 //google.charts.setOnLoadCallback(drawChart_Final);
 
-function drawChart_Final(s) {
+function drawChart_Final(s, prType) {
 
+    
     async function af()
     {
         var sym = s.toUpperCase()
         var winWidth = $( window ).width();  // width of the window
         //winWidth = Math.min(winWidth, 614);  // The max width of the chart can be 614 px
         ////////////////////////////////////////////////////////////////////
-        var dataFromYahoo = await YahooData(sym); // get Yahoo data for a symbol
+        //console.log(sym,prType); // prType=1 daily, 2 weekly, 3 monthly
+        var dataFromYahoo = await YahooData(sym, 365); // get Yahoo data for a symbol YahooData(sym, noOfDays)
+        prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+
+        //console.log(dataFromYahoo);
         /////////////////////////////////////////////////////////////////////////////
         // Do other CALCULATIONS here, like stocastics, Avg etc
-        //console.log(jsonAryPr);
-        //console.log(dataAryPr);
-        var jAryPrClean = await cleanData(jsonAryPr);
+        var jAryPrClean = await cleanData(dataFromYahoo);
         //console.log(jAryPrClean);
         jsonAryPr = jAryPrClean;  // assign the ceaned up array
-        console.log(1);
+        //console.log(1);
         var rnNoLag = [];
         var NoLag =  await fn_CalcNoLagEMA(jsonAryPr, 1,rnNoLag);  // we pass the jasonAry and the price type 1=daily, 2=weekly, 3=monthly
-        //console.log("jsonAry: ", jsonAryPr);
-        //console.log("rn: ", rnNoLag.value);
-        console.log(2);
+        //console.log(2);
         var Pr10dAvg = await fn_CalcSMA(jsonAryPr, 10); // 10 day moving average of close price
         //console.log(Pr10dAvg);
-        console.log(3);
+        //console.log(3);
         var stocastics5 = await fn_CalcStocastics(jsonAryPr,5,3,3); //5 days lookback, 3 days avg for %D, 3 days avg for %K 
         var stocastics14 = await fn_CalcStocastics(jsonAryPr,14,3,3); //14 days lookback, 3 days avg for %D, 3 days avg for %K 
         var bounds = await fn_CalcBounds_AMA(jsonAryPr,1);  // calculate bounds and AMA and AMAStopLossPrice
@@ -49,7 +50,7 @@ function drawChart_Final(s) {
         var PrFinalAry = await combineData(PrFinalAry, prMtm, "MtmAvgStr");  // pass the array to which we need to combine the key and the key
 
         //console.log(PrFinalAry);
-        console.log(4);
+        //console.log(4);
         
         //////////////////////////////////////////////////////////////////////////////
         // put data in a MASTER DATA TABLE. This GOOGLE DATATABLE will have all the data we want for every chart.
@@ -60,7 +61,7 @@ function drawChart_Final(s) {
         /////////////////////////////////////////////////////////////////////////////
         // Daily price chart. select the data we want from the master table for daily price chart
         var DlyData_CloPr = new google.visualization.DataView(masterDataTable);
-        DlyData_CloPr.setColumns([0, 5, 7, 8, 13]);  // date, AdjClo, nolag, avg10d, AMA
+        DlyData_CloPr.setColumns([0, 4, 7, 8, 13]);  // date, AdjClo, nolag, avg10d, AMA
 
         var chart_Dly_CloPr = new google.visualization.LineChart(document.getElementById('chart_id_Dly_CloPr'));
         options_Dly_Pr.title = 'Daily Close Price (' + sym + ')';
@@ -96,7 +97,7 @@ function drawChart_Final(s) {
 }
 
 /////////////////////////////////////////////////////////
-function YahooData(sym){
+function YahooData(sym, numOfDays){
 
     console.log('reached YahooData ', sym);
       
@@ -107,9 +108,9 @@ function YahooData(sym){
     var y_Data;
     var j_data;
 
-    async function bb(sym)
+    async function bb(sym, numOfDays)
     {
-        d = await myFunHist(sym);
+        d = await myFunHist(sym, numOfDays);
 
         csvdata = d.data;
         
@@ -160,9 +161,11 @@ function YahooData(sym){
             dAry.push(rowObjL);
         }
 
-        //console.log(JSON.stringify(jsonAry));
+        //console.log(dAry);
         jsonAryPr = jsonAry; //move the data to a global variable
         dataAryPr = dAry; // move data to global variables
+
+        return jsonAry;  // return the JSON array
 /////////////////////////////////////////////////////////////////////////////////////////////////
         /*
         var dData = new google.visualization.DataTable();
@@ -185,7 +188,7 @@ function YahooData(sym){
 ////////////////////////////////////////////////////////////////////////////////////
     }
 
-    return bb(sym);
+    return bb(sym, numOfDays);
     
 
 }
