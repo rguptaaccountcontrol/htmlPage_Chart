@@ -23,14 +23,14 @@
 
 <button onclick="myFunction()">Try it</button>
 
-<button onclick="myFunctionYahoo('amzn')">yahoo axios</button>
-<button onclick="myFunctionYahoo()">yahoo axios undefined</button>
+<button onclick="myFunYahooQuotes('amzn')">yahoo axios</button>
+<button onclick="myFunYahooQuotes()">yahoo axios undefined</button>
 
-<button onclick="myFunctionYahooA()">yahooA</button>
+<button onclick="myFunYahooQuotesA()">yahooA</button>
 
 <button onclick="getValue()">getValue XMLHttpRequest</button>
 
-<button onclick="myFunHist('amzn')">YahooHist</button>
+<button onclick="myFunYahooHist('amzn')">YahooHist</button>
 
 <p id="demo"></p>
 
@@ -64,15 +64,15 @@ function GetTicker(i){
   switch(i) {
              case 1:
                 document.getElementById("daily").style.color = "red";
-                myFunctionYahoo(ticker);
+                myFunYahooQuotes(ticker);
                 break;
              case 2:
                 document.getElementById("weekly").style.color = "red";
-                myFunctionYahoo(ticker);
+                myFunYahooQuotes(ticker);
                break;
               case 3:
                   document.getElementById("monthly").style.color = "red";
-                  myFunctionYahoo(ticker);
+                  myFunYahooQuotes(ticker);
                break;
              default:
                // code block
@@ -85,7 +85,7 @@ function myFunction() {
 } // myFunction()
 
 
-function myFunctionYahoo(t) {
+function myFunYahooQuotes(t) {
 
   
   //alert(parseInt(t.length));
@@ -143,7 +143,7 @@ function myFunctionYahoo(t) {
   //document.getElementById("demo").innerHTML = x;
 }
 
-function myFunctionYahooA() {
+function myFunYahooQuotesA() {
     var theUrl = "http://localhost:3000/yahoo?sym=aapl";
 
     var xmlHttp = new XMLHttpRequest();
@@ -188,7 +188,7 @@ xhr.send(null);
 
 }
 
-function myFunHist(sym)
+function myFunYahooHist(sym)
 {
     var url;
     url = 'http://localhost:3000/yahooH?sym=ibm&d1=8/6/2021&d2=12/12/2022';

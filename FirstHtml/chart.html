@@ -49,7 +49,14 @@ margin-top: -50px;
   <button id = "daily" onclick="GetTicker(1)" >daily</button>   <!-- call GetTicker with prType 1 i.e. daily when daily button is clicked-->
   <button id = "weekly" onclick="GetTicker(2)">weekly</button>  <!-- call GetTicker with prType 2 i.e. weekly when weekly button is clicked-->
   <button id = "monthly" onclick="GetTicker(3)">monthly</button> <!-- call GetTicker with prType 3 i.e. monthly when monthly button is clicked-->
+  <label id="LabelTicker"></label>
 </div>
+
+
+<div id="quoteprice">
+  
+</div>
+
 
 <div class="mtum" id="chart_id_Dly_Mtm">
 </div>
@@ -57,19 +64,21 @@ margin-top: -50px;
 </div>
 <div id="chart_id_Dly_CloPr">
 </div>
-<p id="quoteprice"></p> 
+ 
 <p id="messages"></p>
 <p id="messages1"></p>
-<p>Click the button to get the content of daily, weekly ot monthly.</p>
+<p>Click the button to get the content of daily, weekly or monthly.</p>
 
 <button onclick="myFunction()">Try it</button>
 
 
-<button onclick="myFunHist('amzn')">YahooHist</button>
+<button onclick="myFunYahooHist('amzn')">YahooHist</button>
 
 <button onclick="drawChart_Final('aapl')">chart</button>
 
 <button onclick="aaaa()">test</button>
+
+<div id="bottomblock"></div>
 
 <p id="demo"></p>
 
