@@ -5,7 +5,7 @@ var dData;
 const baseUrl = 'http://192.168.0.171/YahooProxy/';
 //const baseUrl = `http://192.168.0.171:3000/`;
 
-function myFunctionYahoo(t) {
+function myFunYahooQuotes(t) {
 
   
   //alert(parseInt(t.length));
@@ -68,7 +68,7 @@ function myFunctionYahoo(t) {
 
 
 
-function myFunHist(sym, numOfDays)
+function myFunYahooHist(sym, numOfDays)
 {
     const d = new Date();
     d.setDate(d.getDate() + 1);  // increase the date by 1
@@ -128,18 +128,50 @@ function myFunHist(sym, numOfDays)
 
 function QuoteData4Chart()
 {
-    document.getElementById("quoteprice").innerHTML = JSON.stringify(dData.data);
-    //console.log(dData);
+    fChg = Number(dData.data.chg.replace('%',''));  // change as a number
+
+    var objData = { "ytdReturn": dData.data.ytdReturn, "Hi": dData.data.Hi,"Low":dData.data.Low, "vol":dData.data.vol,"symbol":dData.data.symbol,"bid":dData.data.bid,"ask":dData.data.ask,}
+    var offHi;
+    if (Number(dData.data.Clo) > 0)
+      offHi = (((dData.data.Clo - dData.data.fiftyTwoWeekHigh)/dData.data.Clo)*100).toFixed(2);
+    else
+      offHi = "na";
+    // get date time
+    const unixTimestamp = dData.data.regularMarketTime; 
+    const milliseconds = unixTimestamp * 1000 // convert unix time to milliseconds
+    const dateObject = new Date(milliseconds) 
+    const humanDateFormat = dateObject.toLocaleString() //2019-12-9 10:30:15
+    
+    var stopblock = "<b>" + dData.data.shortName + "</b>" + "  (" + humanDateFormat +") ";
+    stopblock = stopblock + " off52wkHi: " + offHi + "%,";
+    if (fChg > 0)
+      stopblock = stopblock + " Chg: " + "<b style=color:blue;>" + dData.data.chg + "</b>,";
+    else
+      stopblock = stopblock + " Chg: " + "<b style=color:red;>" + dData.data.chg + "</b>,";
+
+    stopblock = stopblock + " Close: " + dData.data.Clo + ",";
+
+    if (Number(dData.data.limit) > Number(dData.data.Clo))
+      stopblock = stopblock + " Limit: " + "<b style=color:blue;>" + dData.data.limit + "</b>";
+    else
+      stopblock = stopblock + " Limit: " + "<b style=color:red;>" + dData.data.limit + "</b>";
+    //var stopblock = stopblock + " <br/> " ;
+    stopblock = stopblock + "<p>" + JSON.stringify(objData) + "</p>";
+
+    document.getElementById("quoteprice").innerHTML = stopblock;
+    document.getElementById("LabelTicker").innerHTML = dData.data.symbol;
+
+    document.getElementById("bottomblock").innerHTML = JSON.stringify(dData.data);
 }
 
 
-//console.log("aa");
+
 
 function aaaa()
-{
+{ // example to show how we can use async and await verbs
   /*async function bb()
   {
-  var d = await myFunHist('aapl');
+  var d = await myFunYahooHist('aapl');
 
   document.getElementById("messages1").innerHTML = JSON.stringify(d);
 
@@ -161,31 +193,10 @@ function aaaa()
     } catch (error) {
         console.log(error);
     }
-}
+  }
 
-
-//let r = getUsers();
-
-async function renderUsers() {
-  let users = await getUsers();
-  //let html = '';
-  //users.forEach(user => {
-  //    let htmlSegment = `<div class="user">
-  //                        <img src="${user.profileURL}" >
-   //                       <h2>${user.firstName} ${user.lastName}</h2>
-    //                      <div class="email"><a href="email:${user.email}">${user.email}</a></div>
-   //                   </div>`;
-
-    //  html += htmlSegment;
-  //});
-
-  //let container = document.querySelector('.container');
-  //container.innerHTML = html;
-  document.getElementById("messages1").innerHTML = users;
-  //https://www.javascripttutorial.net/javascript-fetch-api/
-}
-
-renderUsers();
+  getUsers();
 
 }
+
 

@@ -8,7 +8,7 @@ var options_Mtum = {
 
     legend: {
               position: 'in',
-              //maxLines: 2,
+              textStyle: {fontSize: 10},
           },
     crosshair: { trigger: 'both' }, // Display crosshairs on focus and selection.
 

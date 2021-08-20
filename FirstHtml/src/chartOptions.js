@@ -64,7 +64,7 @@ var options_Dly_Pr = {
 
     legend: {
               position: 'in',
-              //maxLines: 2,
+              textStyle: {fontSize: 10},
           },
     crosshair: { trigger: 'both' }, // Display crosshairs on focus and selection.
 
@@ -102,10 +102,10 @@ var options_Dly_Pr = {
 
     series: {
             //0: { targetAxisIndex: 0, lineWidth: 0.75 },  // price line
-            0: { lineWidth: 0.5 },  // Sto 5
+            0: { lineWidth: 0.5, labelInLegend: "Sto" },  // Sto 5
             1: { lineWidth: 0.5 },  // Sto14
-            2: { lineWidth: 0.5},   // Sto Up Band
-            3: { lineWidth: 0.5},   // Sto Low Band
+            2: { lineWidth: 0.5, visibleInLegend: false},   // Sto Up Band
+            3: { lineWidth: 0.5, visibleInLegend: false},   // Sto Low Band
             //2: { pointSize: .5, pointShape: 'square', lineWidth: 0.0 },
             //3: { lineWidth: 0.5, lineDashStyle: [1,1] },
         },

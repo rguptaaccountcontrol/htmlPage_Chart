@@ -1,12 +1,17 @@
-function GetTicker(i){
+function GetTicker(i) {
     //alert('reached function')
     var ticker = document.getElementById("tickerid").value; // get the ticker
   
     if (ticker === '')
     { 
       //alert('no ticker');
-      document.getElementById("messages").innerHTML = 'Enter a ticker in the above box';
-      return;
+      ticker = document.getElementById("LabelTicker").innerText; // get the ticker in label
+      //alert(ticker);
+      if (ticker === '')
+      {
+        document.getElementById("messages").innerHTML = 'Enter a ticker in the above box';
+        return;
+      }
     }
     //alert(ticker);
     // color all buttons black
@@ -18,22 +23,26 @@ function GetTicker(i){
     switch(i) {
                case 1:
                   document.getElementById("daily").style.color = "red";
-                  myFunctionYahoo(ticker);
+                  myFunYahooQuotes(ticker);
                   drawChart_Final(ticker, 1);
                   break;
                case 2:
                   document.getElementById("weekly").style.color = "red";
-                  myFunctionYahoo(ticker);
+                  myFunYahooQuotes(ticker);
                   drawChart_Final(ticker, 2);
                  break;
                 case 3:
                     document.getElementById("monthly").style.color = "red";
-                    myFunctionYahoo(ticker);
+                    myFunYahooQuotes(ticker);
                     drawChart_Final(ticker, 3);
                  break;
                default:
                  // code block
              }
+
+    // We have th ticker value so we can make the input box blank
+    const inputBox = document.getElementById('tickerid');
+    inputBox.value = "";
   } // end GetTicker(i)
   
   function myFunction() {

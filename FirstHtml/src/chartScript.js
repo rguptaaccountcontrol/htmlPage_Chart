@@ -74,8 +74,12 @@ function drawChart_Final(s, prType) {
         DlyData_Sto.setColumns([0, 9, 10, 11, 12]);  // date, StoK5B, StoK14B, Sto Up Band, Sto Low Band
         
         var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Dly_Sto'));
+        var l = stocastics5.length;
+        console.log(l);
         options_Sto.title = 'Daily Stocatics (' + sym + ')';
         options_Sto.width = winWidth;
+        options_Sto.series[0].labelInLegend = 'StoK5 (' + stocastics5[l-1].StoK5B + ')';
+        options_Sto.series[1].labelInLegend = 'StoK14 (' + stocastics14[l-1].StoK14B + ')';
         chart_Dly_Sto.draw(DlyData_Sto, options_Sto);
 
         ////////////////////////////////////////////////////////////////////////////
@@ -110,7 +114,7 @@ function YahooData(sym, numOfDays){
 
     async function bb(sym, numOfDays)
     {
-        d = await myFunHist(sym, numOfDays);
+        d = await myFunYahooHist(sym, numOfDays);
 
         csvdata = d.data;
         
