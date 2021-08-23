@@ -18,16 +18,45 @@ function drawChart_Final(s, prType) {
         //winWidth = Math.min(winWidth, 614);  // The max width of the chart can be 614 px
         ////////////////////////////////////////////////////////////////////
         //console.log(sym,prType); // prType=1 daily, 2 weekly, 3 monthly
-        var dataFromYahoo = await YahooData(sym, 365); // get Yahoo data for a symbol YahooData(sym, noOfDays)
-        prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+        var NumberOfDays;
+        switch (prType)
+        {
+            case 1:  // for daily chart
+                NumberOfDays = 365; // should increase it to 600 later
+                break;
+            case 2: // for weekly chart
+                NumberOfDays = 1460;
+                break;
+            case 3: // for monthly chart
+                NumberOfDays = 365; // should increase it to 7220 later
+                break;
+        }
 
+        var dataFromYahoo = await YahooData(sym, NumberOfDays); // get Yahoo data for a symbol YahooData(sym, noOfDays)
         //console.log(dataFromYahoo);
         /////////////////////////////////////////////////////////////////////////////
         // Do other CALCULATIONS here, like stocastics, Avg etc
         var jAryPrClean = await cleanData(dataFromYahoo);
         //console.log(jAryPrClean);
         jsonAryPr = jAryPrClean;  // assign the ceaned up array
-        //console.log(1);
+        jWk = await Daily2Weekly(jsonAryPr); // create weekly data in JSON format
+       
+        switch (prType)
+        {
+            case 1:  // for daily chart
+                // do nothing
+                break;
+            case 2: // for weekly chart
+                 //console.log(jWk);
+                jsonAryPr = jWk;
+                break;
+            case 3: // for monthly chart
+                // do nothing right now
+                break;     
+        }
+
+        prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+        ////////////////////////////////////////////////////////////
         var rnNoLag = [];
         var NoLag =  await fn_CalcNoLagEMA(jsonAryPr, 1,rnNoLag);  // we pass the jasonAry and the price type 1=daily, 2=weekly, 3=monthly
         //console.log(2);
