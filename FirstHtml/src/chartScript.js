@@ -28,7 +28,7 @@ function drawChart_Final(s, prType) {
                 NumberOfDays = 1460;
                 break;
             case 3: // for monthly chart
-                NumberOfDays = 7220; // should increase it to 7220 later
+                NumberOfDays = 1460*2; //7220; // should increase it to 7220 later
                 break;
         }
 
