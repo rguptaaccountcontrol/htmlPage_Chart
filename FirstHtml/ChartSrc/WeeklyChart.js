@@ -4,22 +4,17 @@ async function DrawWeeklyChart(sym, jWklyArray)
         var winWidth = $( window ).width();  // width of the window
         //winWidth = Math.min(winWidth, 614);  // The max width of the chart can be 614 px
         ////////////////////////////////////////////////////////////////////
-        //console.log(sym,prType); // prType=1 daily, 2 weekly, 3 monthly
 
         prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
         ////////////////////////////////////////////////////////////
         var rnNoLag = [];
         var NoLag =  await fn_CalcNoLagEMA(jWklyArray, 1,rnNoLag);  // we pass the jasonAry and the price type 1=daily, 2=weekly, 3=monthly
-        //console.log(2);
         var Pr10dAvg = await fn_CalcSMA(jWklyArray, 10); // 10 day moving average of close price
-        //console.log(Pr10dAvg);
-        //console.log(3);
         var stocastics5 = await fn_CalcStocastics(jWklyArray,5,3,3); //5 days lookback, 3 days avg for %D, 3 days avg for %K 
         var stocastics14 = await fn_CalcStocastics(jWklyArray,14,3,3); //14 days lookback, 3 days avg for %D, 3 days avg for %K 
         var bounds = await fn_CalcBounds_AMA(jWklyArray,1);  // calculate bounds and AMA and AMAStopLossPrice
         var prMtm = await fn_CalcPriceMomentum(jWklyArray,1);
-        //console.log(stocastics);
-        //console.log(stocastics14);
+        
         // COMBINE ALL CALCULATED DATA INTO ONE JSON ARRAY
         var PrFinalAry = await combineData(jWklyArray, NoLag, "nolag");  // pass the array to which we need to combine the key and the key
         var PrFinalAry = await combineData(PrFinalAry, Pr10dAvg, "avg10d");  // pass the array to which we need to combine the key and the key
@@ -29,9 +24,6 @@ async function DrawWeeklyChart(sym, jWklyArray)
         var PrFinalAry = await combineData(PrFinalAry, prMtm, "MtmRawStr");  // pass the array to which we need to combine the key and the key
         var PrFinalAry = await combineData(PrFinalAry, prMtm, "MtmAvgStr");  // pass the array to which we need to combine the key and the key
 
-        //console.log(PrFinalAry);
-        //console.log(4);
-        
         //////////////////////////////////////////////////////////////////////////////
         // put data in a MASTER DATA TABLE. This GOOGLE DATATABLE will have all the data we want for every chart.
         var masterDataTable = new google.visualization.DataTable();

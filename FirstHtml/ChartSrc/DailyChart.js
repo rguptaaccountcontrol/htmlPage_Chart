@@ -10,16 +10,12 @@ async function DrawDailyChart(sym, jDailyArray)
         ////////////////////////////////////////////////////////////
         var rnNoLag = [];
         var NoLag =  await fn_CalcNoLagEMA(jDailyArray, 1,rnNoLag);  // we pass the jasonAry and the price type 1=daily, 2=weekly, 3=monthly
-        //console.log(2);
         var Pr10dAvg = await fn_CalcSMA(jDailyArray, 10); // 10 day moving average of close price
-        //console.log(Pr10dAvg);
-        //console.log(3);
         var stocastics5 = await fn_CalcStocastics(jDailyArray,5,3,3); //5 days lookback, 3 days avg for %D, 3 days avg for %K 
         var stocastics14 = await fn_CalcStocastics(jDailyArray,14,3,3); //14 days lookback, 3 days avg for %D, 3 days avg for %K 
         var bounds = await fn_CalcBounds_AMA(jDailyArray,1);  // calculate bounds and AMA and AMAStopLossPrice
         var prMtm = await fn_CalcPriceMomentum(jDailyArray,1);
-        //console.log(stocastics);
-        //console.log(stocastics14);
+        
         // COMBINE ALL CALCULATED DATA INTO ONE JSON ARRAY
         var PrFinalAry = await combineData(jDailyArray, NoLag, "nolag");  // pass the array to which we need to combine the key and the key
         var PrFinalAry = await combineData(PrFinalAry, Pr10dAvg, "avg10d");  // pass the array to which we need to combine the key and the key
