@@ -41,23 +41,33 @@ function drawChart_Final(s, prType) {
         jsonAryPr = jAryPrClean;  // assign the ceaned up array
         jWk = await Daily2Weekly(jsonAryPr); // create weekly data in JSON format
        
+        // initialize the html page for weekly chart
+        // should move the initialize to a function
+        document.getElementById("chart_id_Wk_CloPr").innerHTML = "";
+        document.getElementById("chart_id_Wk_Sto").innerHTML = "";
+        document.getElementById("chart_id_Wk_Mtm").innerHTML = "";
+
         switch (prType)
         {
             case 1:  // for daily chart
-                // do nothing
+                prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+                DailyChart = await DrawDailyChart(sym, jsonAryPr);  // draw daily chart
                 break;
             case 2: // for weekly chart
-                 //console.log(jWk);
-                jsonAryPr = jWk;
+                prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+                DailyChart = await DrawDailyChart(sym, jsonAryPr);  // draw daily chart
+                WeeklyChart = await DrawWeeklyChart(sym, jWk);  // draw daily chart
                 break;
             case 3: // for monthly chart
-                // do nothing right now
+                prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+                DailyChart = await DrawDailyChart(sym, jsonAryPr);  // draw daily chart
                 break;     
         }
 
-        prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+        //prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
+        //DailyChart = await DrawDailyChart(sym, jsonAryPr);  // draw daily chart
         ////////////////////////////////////////////////////////////
-        var rnNoLag = [];
+/*        var rnNoLag = [];
         var NoLag =  await fn_CalcNoLagEMA(jsonAryPr, 1,rnNoLag);  // we pass the jasonAry and the price type 1=daily, 2=weekly, 3=monthly
         //console.log(2);
         var Pr10dAvg = await fn_CalcSMA(jsonAryPr, 10); // 10 day moving average of close price
@@ -122,7 +132,7 @@ function drawChart_Final(s, prType) {
         chart_Dly_Sto.draw(DlyData_Mtm, options_Mtum);
 
 
-        
+*/        
     }
 
     af();
