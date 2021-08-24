@@ -62,6 +62,7 @@ function drawChart_Final(s, prType) {
             case 3: // for monthly chart
                 prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
                 DailyChart = await DrawDailyChart(sym, jsonAryPr);  // draw daily chart
+                WeeklyChart = await DrawWeeklyChart(sym, jWk);  // draw weekly chart
                 MthlyChart = await DrawMonthlyChart(sym, jMth);  // draw monthly chart
                 break;     
         }
