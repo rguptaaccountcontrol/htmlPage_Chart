@@ -35,7 +35,7 @@ async function DrawMonthlyChart(sym, jWklyArray)
         var DlyData_CloPr = new google.visualization.DataView(masterDataTable);
         DlyData_CloPr.setColumns([0, 4, 7, 8, 13]);  // date, AdjClo, nolag, avg10d, AMA
 
-        var chart_Dly_CloPr = new google.visualization.LineChart(document.getElementById('chart_id_Wk_CloPr'));
+        var chart_Dly_CloPr = new google.visualization.LineChart(document.getElementById('chart_id_Mth_CloPr'));
         options_Dly_Pr.title = 'Monthly Close Price (' + sym + ')';
         options_Dly_Pr.width = winWidth;
         chart_Dly_CloPr.draw(DlyData_CloPr, options_Dly_Pr);
@@ -45,7 +45,7 @@ async function DrawMonthlyChart(sym, jWklyArray)
         var DlyData_Sto = new google.visualization.DataView(masterDataTable);
         DlyData_Sto.setColumns([0, 9, 10, 11, 12]);  // date, StoK5B, StoK14B, Sto Up Band, Sto Low Band
         
-        var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Wk_Sto'));
+        var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Mth_Sto'));
         var l = stocastics5.length;
         console.log(l);
         options_Sto.title = 'Monthly Stocatics (' + sym + ')';
@@ -59,7 +59,7 @@ async function DrawMonthlyChart(sym, jWklyArray)
         var DlyData_Mtm = new google.visualization.DataView(masterDataTable);
         DlyData_Mtm.setColumns([0, 14, 15]);  // date, MtmRawStr, MtmAvgStr
         
-        var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Wk_Mtm'));
+        var chart_Dly_Sto = new google.visualization.LineChart(document.getElementById('chart_id_Mth_Mtm'));
         options_Mtum.title = 'Monthly Momentum (' + sym + ')';
         options_Mtum.width = winWidth;
         chart_Dly_Sto.draw(DlyData_Mtm, options_Mtum);
