@@ -78,13 +78,17 @@ async function fn_CalcBounds_AMA(jAryPr,prType)
         else
         {
             // the default values will be here.
+            var cloP = Number(jAryPr[i].Close);
+            PrExp = UpBnd = DnBnd = AMAStopLossPr = cloP; //same as the close PromiseRejectionEvent, since we can't calculate
+            ZValue = 0;
+
         }
 
         // AMAStopLoss is defined as a value of AMA iBarsAgo4StopLoss
         if (i > iBarsAgo4StopLoss)
             AMAStopLossPr = Number(rtnJsonAry[i-iBarsAgo4StopLoss].AMA);  // We need to make it a number because the JSON array keeps a string
         else
-            AMAStopLossPr = 0;
+            AMAStopLossPr = Number(jAryPr[i].Close);
         //console.log(dt,i,clo,PrExp,UpBnd,DnBnd,ZValue,"..",diff,diffsqr,avgdiff,expsd);
         //console.log(dt,i,clo,PrExp,AMAStopLossPr);
 

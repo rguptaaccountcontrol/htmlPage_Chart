@@ -16,7 +16,7 @@ async function fn_CalcSMA(jAryPr, NoOfBars)   // jAryPr is the json array with p
         if (Number(i) < Number(NoOfBars))
         {
             tot = tot + clo;
-            OutAvg = clo;  // we pass the same value as the close price
+            OutAvg = clo;  // we pass the same value as the close price till we reach a point where we cdan calculate the average
         }
         else
         {
