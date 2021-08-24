@@ -28,7 +28,7 @@ function drawChart_Final(s, prType) {
                 NumberOfDays = 1460;
                 break;
             case 3: // for monthly chart
-                NumberOfDays = 365; // should increase it to 7220 later
+                NumberOfDays = 7220; // should increase it to 7220 later
                 break;
         }
 
@@ -40,6 +40,7 @@ function drawChart_Final(s, prType) {
         //console.log(jAryPrClean);
         jsonAryPr = jAryPrClean;  // assign the ceaned up array
         jWk = await Daily2Weekly(jsonAryPr); // create weekly data in JSON format
+        var jMth = await Daily2Monthly(jsonAryPr); // create monthly data in JSON format
        
         // initialize the html page for weekly chart
         // should move the initialize to a function
@@ -56,11 +57,12 @@ function drawChart_Final(s, prType) {
             case 2: // for weekly chart
                 prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
                 DailyChart = await DrawDailyChart(sym, jsonAryPr);  // draw daily chart
-                WeeklyChart = await DrawWeeklyChart(sym, jWk);  // draw daily chart
+                WeeklyChart = await DrawWeeklyChart(sym, jWk);  // draw weekly chart
                 break;
             case 3: // for monthly chart
                 prType = 1; // we set it to 1, daily till we have the logic in place for weekly and monthly
                 DailyChart = await DrawDailyChart(sym, jsonAryPr);  // draw daily chart
+                MthlyChart = await DrawMonthlyChart(sym, jMth);  // draw monthly chart
                 break;     
         }
 
