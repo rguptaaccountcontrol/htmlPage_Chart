@@ -10,8 +10,6 @@ async function Daily2Weekly(jDailyPr)
 
     for(var i=0;i<jDailyPr.length;i++)
     {
-        
-
         dt = jDailyPr[i].Date;
         d = new Date(dt);
         dow = d.getDay();  // get the day of week
@@ -32,6 +30,7 @@ async function Daily2Weekly(jDailyPr)
 
             // initialize WkHi, WkLo, WkClo WkVol, obj
             obj = {};  // initialize object
+            WkDt = dt;
             WkHi = hi;
             WkLo = lo;
             WkClo = clo;
@@ -59,6 +58,13 @@ async function Daily2Weekly(jDailyPr)
         oldDow = dow;
     }
     
+    // Take care of the condition when the loop ends
+    obj["Date"] = WkDt;
+    obj["High"] = WkHi;
+    obj["Low"] = WkLo;
+    obj["Close"] = WkClo;
+    obj["Volume"] = WkVol;
+    rtnJWklyAry.push(obj);
 
     return rtnJWklyAry;
 }
