@@ -2,8 +2,9 @@
 
 var dData;
 // Base url defines if we are using through IIS server or local 3000 port
-const baseUrl = 'http://192.168.0.171/YahooProxy/';
+//const baseUrl = 'http://192.168.0.171/YahooProxy/';
 //const baseUrl = `http://192.168.0.171:3000/`;
+const baseUrl = 'http://192.168.0.182/YahooProxy/'; // laptop
 
 function myFunYahooQuotes(t) {
 
